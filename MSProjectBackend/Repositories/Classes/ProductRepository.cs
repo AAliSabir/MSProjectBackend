@@ -1,5 +1,5 @@
-﻿using Backend.Models.DomainModels;
-using Backend.Repositories.Interfaces;
+﻿using MSProjectBackend.Models.DomainModels;
+using MSProjectBackend.Repositories.Interfaces;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -8,7 +8,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Backend.Repositories.Classes
+namespace MSProjectBackend.Repositories.Classes
 {
     public class ProductRepository : BaseRepository, IProductRepository
     {

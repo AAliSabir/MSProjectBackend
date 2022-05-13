@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Backend.Models.DomainModels;
+using MSProjectBackend.Models.DomainModels;
 
-namespace Backend.Repositories.Interfaces
+namespace MSProjectBackend.Repositories.Interfaces
 {
     public interface IRepository<T> where T : BaseEntity
     {

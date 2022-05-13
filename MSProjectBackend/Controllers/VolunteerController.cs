@@ -1,5 +1,5 @@
-﻿using Backend.Models.AppModels;
-using Backend.Services.Interfaces;
+﻿using MSProjectBackend.Models.AppModels;
+using MSProjectBackend.Services.Interfaces;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -34,21 +34,30 @@ namespace Backend.Controllers
         }
 
         
-        [HttpGet("{volunteerId}")]
-        public async Task<VolunteerModel> GetVolunteerById(int volunteerId)
+        [HttpGet]
+        public async Task<IActionResult> GetVolunteerById([FromQuery]int volunteerId)
         {
+            ResponseModel responseObject = new ResponseModel();
+
             try
             {
-                return await _volunteerService.GetVolunteerById(volunteerId);
+                VolunteerModel volunteerModel = await _volunteerService.GetVolunteerById(volunteerId);
+
+                responseObject.Status = "1";
+                responseObject.Message = "Volunteer profile retrieved successfully.";
+                responseObject.OtherInformation =  volunteerModel;
+                return StatusCode(StatusCodes.Status201Created, responseObject);
             }
             catch (Exception ex)
             {
-                throw ex;
+                responseObject.Status = "-1";
+                responseObject.Message = "An exception occurred. Exception: " + ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, responseObject);
             }
         }
         
         [HttpPost]
-        public async Task<IActionResult> AddVolunteer(VolunteerModel volunteer)
+        public async Task<IActionResult> AddVolunteer([FromBody]VolunteerModel volunteer)
         {
             try
             {
@@ -65,27 +74,31 @@ namespace Backend.Controllers
             }            
         }
 
-        
-        [HttpPut("{id}")]
-        public async Task<VolunteerModel> UpdateVolunteer(VolunteerModel volunteerModel)
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateVolunteer([FromBody]VolunteerModel volunteerModel)
         {
+            ResponseModel responseObject = new ResponseModel();
+
             try
             {
-                int id = Convert.ToInt32(this.RouteData.Values["id"]);
+                int rows = await _volunteerService.UpdateVolunteerAsync(volunteerModel);
+                VolunteerModel volunteerModelDb = await _volunteerService.GetVolunteerById(volunteerModel.Id);
 
-                int rows = await _volunteerService.UpdateVolunteerAsync(id, volunteerModel);
-                VolunteerModel volunteerModelDb = await _volunteerService.GetVolunteerById(id);
-
-                return volunteerModelDb;
+                responseObject.Status = "1";
+                responseObject.Message = "Volunteer profile updated successfully.";
+                return StatusCode(StatusCodes.Status200OK, responseObject);
             }
             catch (Exception ex)
             {
-                throw ex;
+                responseObject.Status = "-1";
+                responseObject.Message = "An exception occurred. Exception: " + ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, responseObject);
             }
         }
 
         [HttpDelete("{id}")]
-        public async void DeleteCategory(int id)
+        public async void DeleteVolunteer(int id)
         {
             try
             {

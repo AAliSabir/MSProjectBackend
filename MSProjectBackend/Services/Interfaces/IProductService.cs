@@ -1,10 +1,10 @@
-﻿using Backend.Models.DomainModels;
+﻿using MSProjectBackend.Models.DomainModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Backend.Services.Interfaces
+namespace MSProjectBackend.Services.Interfaces
 {
     public interface IProductService
     {

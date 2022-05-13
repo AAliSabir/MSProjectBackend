@@ -1,7 +1,7 @@
-using Backend.Repositories.Classes;
-using Backend.Repositories.Interfaces;
-using Backend.Services.Classes;
-using Backend.Services.Interfaces;
+using MSProjectBackend.Services.Classes;
+using MSProjectBackend.Services.Interfaces;
+using MSProjectBackend.Repositories.Classes;
+using MSProjectBackend.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +19,8 @@ builder.Services.AddScoped<IVolunteerRepository, VolunteerRepository>();
 //Services
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IVolunteerService, VolunteerService>();
+builder.Services.AddScoped<ISignUpService, SignUpService>();
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -28,6 +30,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 

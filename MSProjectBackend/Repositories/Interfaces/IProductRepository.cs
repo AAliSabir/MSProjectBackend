@@ -1,10 +1,11 @@
-﻿using Backend.Models.DomainModels;
+﻿using MSProjectBackend.Models.DomainModels;
+using MSProjectBackend.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Backend.Repositories.Interfaces
+namespace MSProjectBackend.Repositories.Interfaces
 {
     public interface IProductRepository : IRepository<Product>
     {

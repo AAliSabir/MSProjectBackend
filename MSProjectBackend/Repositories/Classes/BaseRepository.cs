@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Backend.Repositories.Classes
+namespace MSProjectBackend.Repositories.Classes
 {
     public abstract class BaseRepository
     {
