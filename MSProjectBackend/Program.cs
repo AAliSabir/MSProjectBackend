@@ -15,11 +15,12 @@ builder.Services.AddSwaggerGen();
 //Repositories
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IVolunteerRepository, VolunteerRepository>();
+builder.Services.AddScoped<IRegistrationRepository, RegistrationRepository>();
 
 //Services
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IVolunteerService, VolunteerService>();
-builder.Services.AddScoped<ISignUpService, SignUpService>();
+builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 builder.Services.AddCors();
 
 var app = builder.Build();

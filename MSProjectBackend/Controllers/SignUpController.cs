@@ -9,11 +9,13 @@ namespace MSProjectBackend.Controllers
     [ApiController]
     public class SignUpController : ControllerBase
     {
-        private readonly ISignUpService _signUpService;
-        
-        public SignUpController(ISignUpService signUpService)
+        private readonly IRegistrationService _signUpService;
+        private readonly IVolunteerService _volunteerService;
+
+        public SignUpController(IRegistrationService signUpService, IVolunteerService volunteerService)
         {
             _signUpService = signUpService;
+            _volunteerService = volunteerService;
         }
 
         [HttpPost]
@@ -23,13 +25,29 @@ namespace MSProjectBackend.Controllers
 
             try
             {
-                int rowResults = await _signUpService.CreateVolunteerAsync(signUpModel);
+                int rowResults = await _signUpService.CreateAsync(signUpModel);
 
                 if (rowResults > 0)
                 {
-                    responseObject.Status = "1";
-                    responseObject.Message = "User Created Successfully.";
-                    return StatusCode(StatusCodes.Status201Created, responseObject);
+                    VolunteerModel volunteerModel = new VolunteerModel();
+                    volunteerModel.RegistrationId = signUpModel.RegistrationId;
+                    volunteerModel.Name = signUpModel.Name;
+
+                    rowResults = await _volunteerService.CreateVolunteerAsync(volunteerModel);
+                    if (rowResults > 0)
+                    {
+                        responseObject.Status = "1";
+                        responseObject.Message = "User Created Successfully.";
+                        return StatusCode(StatusCodes.Status201Created, responseObject);
+                    }
+                    else
+                    {
+                        await _signUpService.DeleteAsync(signUpModel.RegistrationId);
+
+                        responseObject.Status = "0";
+                        responseObject.Message = "User Creation Unsuccessful, please try again";
+                        return StatusCode(StatusCodes.Status500InternalServerError, responseObject);
+                    }
                 }
                 else
                 {

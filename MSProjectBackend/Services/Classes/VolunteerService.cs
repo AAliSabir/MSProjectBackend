@@ -54,6 +54,7 @@ namespace MSProjectBackend.Services.Classes
             Volunteer volunteer = new Volunteer();
 
             volunteer.Id = volunteerModel.Id;
+            volunteer.RegistrationId = volunteerModel.RegistrationId;
             volunteer.Name = volunteerModel.Name;
             if(!string.IsNullOrEmpty(volunteerModel.DateOfBirth))
                 volunteer.DateOfBirth = Convert.ToDateTime(volunteerModel.DateOfBirth);

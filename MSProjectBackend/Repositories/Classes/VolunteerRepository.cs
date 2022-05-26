@@ -219,7 +219,7 @@ namespace MSProjectBackend.Repositories.Classes
                 
                 if(queryParams.Substring(queryParams.Length - 2).Contains(","))
                 {
-                    queryParams = queryParams.Substring(0, queryParams.Length - 3);
+                    queryParams = queryParams.Substring(0, queryParams.Length - 2);
                 }
 
                 query += queryParams + " WHERE Id = @Id";
@@ -235,14 +235,14 @@ namespace MSProjectBackend.Repositories.Classes
             }
         }
 
-        public async Task<int> DeleteAsync(int id)
+        public async Task<int> DeleteAsync(dynamic id)
         {
             try
             {
                 var query = "DELETE FROM Volunteer WHERE Id = @Id";
 
                 var parameters = new DynamicParameters();
-                parameters.Add("Id", id, DbType.Int32);
+                parameters.Add("Id", Convert.ToInt32(id), DbType.Int32);
 
                 using (var connection = CreateConnection())
                 {

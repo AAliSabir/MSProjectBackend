@@ -8,6 +8,7 @@ namespace MSProjectBackend.Models.AppModels
     public class VolunteerModel
     {
         public int Id { get; set; }
+        public string? RegistrationId { get; set; }
         public string? Name { get; set; }
         public string? DateOfBirth { get; set; }
         public string? CNIC { get; set; }

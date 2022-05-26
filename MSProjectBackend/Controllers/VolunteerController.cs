@@ -21,15 +21,23 @@ namespace Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<List<VolunteerModel>> GetAllVolunteers()
+        public async Task<IActionResult> GetAllVolunteers()
         {
+            ResponseModel responseObject = new ResponseModel();
+
             try
             {
-                return await _volunteerService.GetAllVolunteers();
+                //List<VolunteerModel>
+                responseObject.Status = "1";
+                responseObject.Message = "Success.";
+                responseObject.OtherInformation = await _volunteerService.GetAllVolunteers();
+                return StatusCode(StatusCodes.Status200OK, responseObject);
             }
             catch (Exception ex)
             {
-                throw ex;
+                responseObject.Status = "-1";
+                responseObject.Message = "An exception occurred. Exception: " + ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, responseObject);
             }
         }
 
@@ -59,6 +67,8 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<IActionResult> AddVolunteer([FromBody]VolunteerModel volunteer)
         {
+            ResponseModel responseObject = new ResponseModel();
+
             try
             {
                 int rowResults = await _volunteerService.CreateVolunteerAsync(volunteer);
@@ -70,7 +80,9 @@ namespace Backend.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                responseObject.Status = "-1";
+                responseObject.Message = "An exception occurred. Exception: " + ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, responseObject);
             }            
         }
 
@@ -98,15 +110,22 @@ namespace Backend.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async void DeleteVolunteer(int id)
+        public async Task<IActionResult> DeleteVolunteer(int id)
         {
+            ResponseModel responseObject = new ResponseModel();
+
             try
             {
                 int rows = await _volunteerService.DeleteVolunteerAsync(id);
+                responseObject.Status = "1";
+                responseObject.Message = "Deletion Successful";
+                return StatusCode(StatusCodes.Status200OK, responseObject);
             }
             catch(Exception ex)
             {
-                throw ex;
+                responseObject.Status = "-1";
+                responseObject.Message = "An exception occurred. Exception: " + ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, responseObject);
             }
         }
 

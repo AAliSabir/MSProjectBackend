@@ -96,14 +96,14 @@ namespace MSProjectBackend.Repositories.Classes
             }
         }
 
-        public async Task<int> DeleteAsync(int id)
+        public async Task<int> DeleteAsync(dynamic id)
         {
             try
             {
                 var query = "DELETE FROM Products WHERE Id = @Id";
 
                 var parameters = new DynamicParameters();
-                parameters.Add("Id", id, DbType.Int32);
+                parameters.Add("Id", Convert.ToInt32(id), DbType.Int32);
 
                 using (var connection = CreateConnection())
                 {
