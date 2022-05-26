@@ -14,15 +14,36 @@ namespace MSProjectBackend.Services.Classes
             _registrationRepository = registrationRepository;
         }
 
-        public async Task<int> CreateAsync(SignUpModel signupModel)
+        public async Task<int> CreateAsync(SignUpModel signUpModel)
         {
-            Registration registration = ModelToEntity(signupModel);
+            Registration registration = ModelToEntity(signUpModel);
             return await _registrationRepository.CreateAsync(registration);
         }
 
         public async Task<int> DeleteAsync(string id)
         {
             return await _registrationRepository.DeleteAsync(id);
+        }
+
+        public async Task<int> SignIn(SignInModel signInModel)
+        {
+            try
+            {
+                Registration registeredEntity = await _registrationRepository.SignIn(signInModel.RegistrationId);
+                
+                if(registeredEntity != null)
+                {
+                    string inputPswd = BCrypt.Net.BCrypt.HashPassword(signInModel.Password);
+                    if(inputPswd.Equals(registeredEntity.Password))
+                        return registeredEntity.RegistrationType;
+                }
+
+                return -1;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
         }
 
         private Registration ModelToEntity(SignUpModel signupModel)

@@ -33,6 +33,26 @@ namespace MSProjectBackend.Repositories.Classes
             }
         }
 
+        public async Task<Registration> SignIn(string id)
+        {
+            try
+            {
+                var query = "SELECT * FROM Registration WHERE Id = @Id";
+
+                var parameters = new DynamicParameters();
+                parameters.Add("Id", id, DbType.String);
+
+                using (var connection = CreateConnection())
+                {
+                    return (await connection.QueryFirstOrDefaultAsync<Registration>(query, parameters));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
         public async Task<int> DeleteAsync(dynamic id)
         {
             try

@@ -51,6 +51,26 @@ namespace MSProjectBackend.Repositories.Classes
             }
         }
 
+        public async Task<Volunteer> GetByRegistrationIdAsync(string id)
+        {
+            try
+            {
+                var query = "SELECT * FROM Volunteer WHERE RegistrationId = @RegistrationId";
+
+                var parameters = new DynamicParameters();
+                parameters.Add("RegistrationId", Convert.ToString(id), DbType.String);
+
+                using (var connection = CreateConnection())
+                {
+                    return (await connection.QueryFirstOrDefaultAsync<Volunteer>(query, parameters));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
         public async Task<int> SignUpAsync(Volunteer entity)
         {
             try

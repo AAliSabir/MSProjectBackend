@@ -31,6 +31,12 @@ namespace MSProjectBackend.Services.Classes
             return EntityToModel(volunteer);
         }
 
+        public async Task<VolunteerModel> GetVolunteerByRegistrationId(string id)
+        {
+            Volunteer volunteer = await _volunteerRepository.GetByRegistrationIdAsync(id);
+            return EntityToModel(volunteer);
+        }
+
         public async Task<int> CreateVolunteerAsync(VolunteerModel volunteerModel)
         {
             Volunteer volunteer = ModelToEntity(volunteerModel);
