@@ -71,29 +71,6 @@ namespace MSProjectBackend.Repositories.Classes
             }
         }
 
-        public async Task<int> SignUpAsync(Volunteer entity)
-        {
-            try
-            {
-                var query = @"INSERT INTO Volunteer (Name, Email, Password) 
-                                VALUES (@Name, @Email, @Password)";
-
-                var parameters = new DynamicParameters();
-                parameters.Add("Name", entity.Name, DbType.String);
-                parameters.Add("Email", entity.Email, DbType.String);
-                parameters.Add("Password", entity.Password, DbType.String);
-
-                using (var connection = CreateConnection())
-                {
-                    return (await connection.ExecuteAsync(query, parameters));
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message, ex);
-            }
-        }
-
         public async Task<int> CreateAsync(Volunteer entity)
         {
             try
