@@ -11,25 +11,26 @@ namespace Backend.Controllers
 {
     [EnableCors("CorsPolicy"), Route("api/[controller]/[action]")]
     [ApiController]
-    public class NGOController : ControllerBase
+    public class NGOAppealController : ControllerBase
     {
-        private readonly INGOService _ngoService;
+        private readonly INGOAppealService _ngoAppealService;
 
-        public NGOController(INGOService ngoService)
+        public NGOAppealController(INGOAppealService ngoAppealService)
         {
-            _ngoService = ngoService;
+            _ngoAppealService = ngoAppealService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllNGOs()
+        public async Task<IActionResult> GetAllNGOAppeals()
         {
             ResponseModel responseObject = new ResponseModel();
 
             try
             {
+                //List<NGOModel>
                 responseObject.Status = "1";
                 responseObject.Message = "Success.";
-                responseObject.OtherInformation = await _ngoService.GetAllNGOs();
+                responseObject.OtherInformation = await _ngoAppealService.GetAllNGOAppeals();
                 return StatusCode(StatusCodes.Status200OK, responseObject);
             }
             catch (Exception ex)
@@ -42,17 +43,17 @@ namespace Backend.Controllers
 
         
         [HttpGet]
-        public async Task<IActionResult> GetNGOById([FromQuery]int ngoId)
+        public async Task<IActionResult> GetNGOAppealById([FromQuery]int ngoAppealId)
         {
             ResponseModel responseObject = new ResponseModel();
 
             try
             {
-                NGOModel ngoModel = await _ngoService.GetNGOById(ngoId);
+                NGOAppealModel ngoAppealModel = await _ngoAppealService.GetNGOAppealById(ngoAppealId);
 
                 responseObject.Status = "1";
-                responseObject.Message = "NGO profile retrieved successfully.";
-                responseObject.OtherInformation = ngoModel;
+                responseObject.Message = "NGO Appeal retrieved successfully.";
+                responseObject.OtherInformation = ngoAppealModel;
                 return StatusCode(StatusCodes.Status201Created, responseObject);
             }
             catch (Exception ex)
@@ -64,13 +65,13 @@ namespace Backend.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> AddNGO([FromBody]NGOModel ngo)
+        public async Task<IActionResult> AddNGOAppeal([FromBody]NGOAppealModel ngoAppeal)
         {
             ResponseModel responseObject = new ResponseModel();
 
             try
             {
-                int rowResults = await _ngoService.CreateNGOAsync(ngo);
+                int rowResults = await _ngoAppealService.CreateNGOAppealAsync(ngoAppeal);
 
                 if (rowResults > 0)
                     return Ok();
@@ -87,17 +88,17 @@ namespace Backend.Controllers
 
 
         [HttpPut]
-        public async Task<IActionResult> UpdateNGO([FromBody]NGOModel ngoModel)
+        public async Task<IActionResult> UpdateNGOAppeal([FromBody]NGOAppealModel ngoAppealModel)
         {
             ResponseModel responseObject = new ResponseModel();
 
             try
             {
-                int rows = await _ngoService.UpdateNGOAsync(ngoModel);
-                NGOModel NGOModelDb = await _ngoService.GetNGOById(ngoModel.Id);
+                int rows = await _ngoAppealService.UpdateNGOAppealAsync(ngoAppealModel);
+                NGOAppealModel ngoAppealModelDb = await _ngoAppealService.GetNGOAppealById(ngoAppealModel.Id);
 
                 responseObject.Status = "1";
-                responseObject.Message = "NGO profile updated successfully.";
+                responseObject.Message = "NGO Appeal updated successfully.";
                 return StatusCode(StatusCodes.Status200OK, responseObject);
             }
             catch (Exception ex)
@@ -109,13 +110,13 @@ namespace Backend.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteNGO(int id)
+        public async Task<IActionResult> DeleteNGOAppeal(int id)
         {
             ResponseModel responseObject = new ResponseModel();
 
             try
             {
-                int rows = await _ngoService.DeleteNGOAsync(id);
+                int rows = await _ngoAppealService.DeleteNGOAppealAsync(id);
                 responseObject.Status = "1";
                 responseObject.Message = "Deletion Successful";
                 return StatusCode(StatusCodes.Status200OK, responseObject);
@@ -127,6 +128,5 @@ namespace Backend.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, responseObject);
             }
         }
-
     }
 }
