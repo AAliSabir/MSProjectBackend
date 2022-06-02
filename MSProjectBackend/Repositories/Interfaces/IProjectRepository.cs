@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MSProjectBackend.Repositories.Interfaces
 {
-    public interface IProductRepository : IRepository<Product>
+    public interface IProjectRepository : IRepository<Project>
     {
     }
 }

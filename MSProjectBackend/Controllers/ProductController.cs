@@ -12,18 +12,18 @@ namespace Backend.Controllers
     [ApiController]
     public class ProductController : Controller
     {
-        private readonly IProductService _productService;
+        private readonly IProjectService _productService;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProjectService productService)
         {
             _productService = productService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            return Ok(await _productService.GetAllProducts());
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> Index()
+        //{
+        //    return Ok(await _productService.GetAllProducts());
+        //}
 
         //[HttpPost]
         //[Route("AddCategory")]

@@ -10,19 +10,19 @@ using System.Threading.Tasks;
 
 namespace MSProjectBackend.Repositories.Classes
 {
-    public class ProductRepository : BaseRepository, IProductRepository
+    public class ProjectRepository : BaseRepository, IProjectRepository
     {
-        public ProductRepository(IConfiguration configuration) : base(configuration)
+        public ProjectRepository(IConfiguration configuration) : base(configuration)
         { }
 
-        public async Task<List<Product>> GetAllAsync()
+        public async Task<List<Project>> GetAllAsync()
         {
             try
             {
-                var query = "SELECT * FROM Products";
+                var query = "SELECT * FROM Project";
                 using (var connection = CreateConnection())
                 {
-                    return (await connection.QueryAsync<Product>(query)).ToList();
+                    return (await connection.QueryAsync<Project>(query)).ToList();
                 }
             }
             catch (Exception ex)
@@ -31,18 +31,18 @@ namespace MSProjectBackend.Repositories.Classes
             }
         }
 
-        public async Task<Product> GetByIdAsync(int id)
+        public async Task<Project> GetByIdAsync(int id)
         {
             try
             {
-                var query = "SELECT * FROM Products WHERE Id = @Id";
+                var query = "SELECT * FROM Project WHERE Id = @Id";
 
                 var parameters = new DynamicParameters();
                 parameters.Add("Id", id, DbType.Int32);
 
                 using (var connection = CreateConnection())
                 {
-                    return (await connection.QueryFirstOrDefaultAsync<Product>(query, parameters));
+                    return (await connection.QueryFirstOrDefaultAsync<Project>(query, parameters));
                 }
             }
             catch (Exception ex)
@@ -51,17 +51,15 @@ namespace MSProjectBackend.Repositories.Classes
             }
         }
 
-        public async Task<int> CreateAsync(Product entity)
+        public async Task<int> CreateAsync(Project entity)
         {
             try
             {
-                var query = "INSERT INTO Products (Name, Price, Quantity) VALUES (@Name, @Price, @Quantity)";
+                var query = "INSERT INTO Project (Name, Price, Quantity) VALUES (@Name, @Price, @Quantity)";
 
                 var parameters = new DynamicParameters();
                 parameters.Add("Name", entity.Name, DbType.String);
-                parameters.Add("Price", entity.Price, DbType.Decimal);
-                parameters.Add("Quantity", entity.Quantity, DbType.Int32);
-
+                
                 using (var connection = CreateConnection())
                 {
                     return (await connection.ExecuteAsync(query, parameters));
@@ -73,16 +71,15 @@ namespace MSProjectBackend.Repositories.Classes
             }
         }
 
-        public async Task<int> UpdateAsync(Product entity)
+        public async Task<int> UpdateAsync(Project entity)
         {
             try
             {
-                var query = "UPDATE Products SET Name = @Name, Price = @Price, Quantity = @Quantity WHERE Id = @Id";
+                var query = "UPDATE Project SET Name = @Name, Price = @Price, Quantity = @Quantity WHERE Id = @Id";
 
                 var parameters = new DynamicParameters();
                 parameters.Add("Name", entity.Name, DbType.String);
-                parameters.Add("Price", entity.Price, DbType.Decimal);
-                parameters.Add("Quantity", entity.Quantity, DbType.Int32);
+                
                 parameters.Add("Id", entity.Id, DbType.Int32);
 
                 using (var connection = CreateConnection())
@@ -100,7 +97,7 @@ namespace MSProjectBackend.Repositories.Classes
         {
             try
             {
-                var query = "DELETE FROM Products WHERE Id = @Id";
+                var query = "DELETE FROM Project WHERE Id = @Id";
 
                 var parameters = new DynamicParameters();
                 parameters.Add("Id", Convert.ToInt32(id), DbType.Int32);
