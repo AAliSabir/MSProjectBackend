@@ -142,5 +142,53 @@ namespace MSProjectBackend.Controllers
             }
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> GetProfileByRegistrationId([FromQuery] string registrationId, int profileType)
+        {
+            ResponseModel responseObject = new ResponseModel();
+
+            try
+            {
+                if (profileType == 1)
+                {
+                    VolunteerModel volunteerModel = await _volunteerService.GetVolunteerByRegistrationId(registrationId);
+                    if (volunteerModel != null)
+                    {
+                        responseObject.Status = "1";
+                        responseObject.Message = "Profile retrieved successfully.";
+                        responseObject.OtherInformation = volunteerModel;
+                    }
+                }
+                else if (profileType == 2)
+                {
+                    NGOModel ngoModel = await _ngoService.GetNGOByRegistrationId(registrationId);
+
+                    if (ngoModel != null)
+                    {
+                        responseObject.Status = "1";
+                        responseObject.Message = "Profile retrieved successfully.";
+                        responseObject.OtherInformation = ngoModel;
+                    }
+                }
+
+                if(string.IsNullOrEmpty(responseObject.Status))
+                {
+                    responseObject.Status = "0";
+                    responseObject.Message = "Profile not found, please try again";
+                    return StatusCode(StatusCodes.Status404NotFound, responseObject);
+                }
+
+                return StatusCode(StatusCodes.Status200OK, responseObject);
+
+            }
+            catch (Exception ex)
+            {
+                responseObject.Status = "-1";
+                responseObject.Message = "An exception occurred. Exception: " + ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, responseObject);
+            }
+        }
+
     }
 }
