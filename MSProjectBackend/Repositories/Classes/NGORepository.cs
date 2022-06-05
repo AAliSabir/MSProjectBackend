@@ -51,15 +51,36 @@ namespace MSProjectBackend.Repositories.Classes
             }
         }
 
+        public async Task<NGO> GetByRegistrationIdAsync(string id)
+        {
+            try
+            {
+                var query = "SELECT * FROM NGO WHERE RegistrationId = @RegistrationId";
+
+                var parameters = new DynamicParameters();
+                parameters.Add("RegistrationId", id, DbType.String);
+
+                using (var connection = CreateConnection())
+                {
+                    return (await connection.QueryFirstOrDefaultAsync<NGO>(query, parameters));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
         public async Task<int> CreateAsync(NGO entity)
         {
             try
             {
-                var query = "INSERT INTO NGO (Name) VALUES (@Name)";
+                var query = "INSERT INTO NGO (RegistrationId, Name) VALUES (@RegistrationId, @Name)";
 
                 var parameters = new DynamicParameters();
+                parameters.Add("RegistrationId", entity.RegistrationId, DbType.String);
                 parameters.Add("Name", entity.Name, DbType.String);
-                
+
                 using (var connection = CreateConnection())
                 {
                     return (await connection.ExecuteAsync(query, parameters));
@@ -75,12 +96,73 @@ namespace MSProjectBackend.Repositories.Classes
         {
             try
             {
-                var query = "UPDATE NGO SET Name = @Name WHERE Id = @Id";
+                var query = "UPDATE NGO SET ";
 
                 var parameters = new DynamicParameters();
-                parameters.Add("Name", entity.Name, DbType.String);
+                string queryParams = string.Empty;
                 
                 parameters.Add("Id", entity.Id, DbType.Int32);
+
+                if (!string.IsNullOrEmpty(entity.Name))
+                {
+                    queryParams = "Name = @Name, ";
+                    parameters.Add("Name", entity.Name, DbType.String);
+                }
+
+                if (!string.IsNullOrEmpty(entity.Email))
+                {
+                    queryParams += "Email = @Email, ";
+                    parameters.Add("Email", entity.Email, DbType.String);
+                }
+
+                if (!string.IsNullOrEmpty(entity.RegistrationNumber))
+                {
+                    queryParams += "RegistrationNumber = @RegistrationNumber, ";
+                    parameters.Add("RegistrationNumber", entity.RegistrationNumber, DbType.String);
+                }
+
+                if (entity.RegistrationDate != null)
+                {
+                    queryParams += "RegistrationDate = @RegistrationDate, ";
+                    parameters.Add("RegistrationDate", entity.RegistrationDate, DbType.DateTime);
+                }
+
+                if (!string.IsNullOrEmpty(entity.About))
+                {
+                    queryParams += "About = @About, ";
+                    parameters.Add("About", entity.About, DbType.String);
+                }
+
+                if (!string.IsNullOrEmpty(entity.Address))
+                {
+                    queryParams += "Address = @Address, ";
+                    parameters.Add("Address", entity.Address, DbType.String);
+                }
+
+                if (entity.ProvinceId != null)
+                {
+                    queryParams += "ProvinceId = @ProvinceId, ";
+                    parameters.Add("ProvinceId", entity.ProvinceId, DbType.Int32);
+                }
+
+                if (entity.CityId != null)
+                {
+                    queryParams += "CityId = @CityId, ";
+                    parameters.Add("CityId", entity.CityId, DbType.Int32);
+                }
+
+                if (!string.IsNullOrEmpty(entity.AreasOfWork))
+                {
+                    queryParams += "AreasOfWork = @AreasOfWork, ";
+                    parameters.Add("AreasOfWork", entity.AreasOfWork, DbType.String);
+                }
+
+                if (queryParams.Substring(queryParams.Length - 2).Contains(","))
+                {
+                    queryParams = queryParams.Substring(0, queryParams.Length - 2);
+                }
+
+                query += queryParams + " WHERE Id = @Id";
 
                 using (var connection = CreateConnection())
                 {

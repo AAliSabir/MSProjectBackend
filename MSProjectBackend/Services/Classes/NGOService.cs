@@ -30,9 +30,16 @@ namespace MSProjectBackend.Services.Classes
             return EntityToModel(ngo);
         }
 
+        public async Task<NGOModel> GetNGOByRegistrationId(string registrationId)
+        {
+            NGO ngo = await _ngoRepository.GetByRegistrationIdAsync(registrationId);
+            return EntityToModel(ngo);
+        }
+
         public async Task<int> CreateNGOAsync(NGOModel ngoModel)
         {
             NGO ngo = ModelToEntity(ngoModel);
+            ngo.RegistrationId = ngoModel.RegistrationId;
             return await _ngoRepository.CreateAsync(ngo);
         }
 
@@ -53,7 +60,6 @@ namespace MSProjectBackend.Services.Classes
             NGO ngo = new NGO();
 
             ngo.Id = ngoModel.Id;
-            ngo.RegistrationId = ngoModel.RegistrationId;
             ngo.Name = ngoModel.Name;
             ngo.Email = ngoModel.Email;
             ngo.RegistrationNumber = ngoModel.RegistrationId;

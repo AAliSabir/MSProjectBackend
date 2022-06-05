@@ -11,6 +11,7 @@ namespace MSProjectBackend.Services.Interfaces
     {
         Task<List<NGOModel>> GetAllNGOs();
         Task<NGOModel> GetNGOById(int id);
+        Task<NGOModel> GetNGOByRegistrationId(string registrationId);
         Task<int> CreateNGOAsync(NGOModel ngoModel);
         Task<int> UpdateNGOAsync(NGOModel ngoModel);
         Task<int> DeleteNGOAsync(int id);

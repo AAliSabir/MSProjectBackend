@@ -33,9 +33,10 @@ namespace MSProjectBackend.Services.Classes
                 
                 if(registeredEntity != null)
                 {
-                    string inputPswd = BCrypt.Net.BCrypt.HashPassword(signInModel.Password);
-                    if(inputPswd.Equals(registeredEntity.Password))
-                        return registeredEntity.RegistrationType;
+                    //string inputPswd = BCrypt.Net.BCrypt.HashPassword(signInModel.Password);
+                    string inputPswd = signInModel.Password;
+                    if (inputPswd.Equals(registeredEntity.Password))
+                        return registeredEntity.RegistrationType;                    
                 }
 
                 return -1;
@@ -51,7 +52,8 @@ namespace MSProjectBackend.Services.Classes
             Registration registration = new Registration();
 
             registration.Id = signupModel.RegistrationId;
-            registration.Password = BCrypt.Net.BCrypt.HashPassword(signupModel.Password);
+            //registration.Password = BCrypt.Net.BCrypt.HashPassword(signupModel.Password);
+            registration.Password = signupModel.Password;
             registration.RegistrationType = signupModel.RegistrationType;
 
             return registration;

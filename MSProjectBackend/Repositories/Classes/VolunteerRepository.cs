@@ -75,10 +75,11 @@ namespace MSProjectBackend.Repositories.Classes
         {
             try
             {
-                var query = @"INSERT INTO Volunteer (Name, DateOfBirth, CNIC, ContactNo, Email, Gender, IsIndependent, NGOId) 
-                                VALUES (@Name, @DateOfBirth, @CNIC, @ContactNo, @Email, @Gender, @IsIndependent, @NGOId)";
+                var query = @"INSERT INTO Volunteer (RegistrationId, Name, DateOfBirth, CNIC, ContactNo, Email, Gender, IsIndependent, NGOId) 
+                                VALUES (@RegistrationId, @Name, @DateOfBirth, @CNIC, @ContactNo, @Email, @Gender, @IsIndependent, @NGOId)";
                            
                 var parameters = new DynamicParameters();
+                parameters.Add("RegistrationId", entity.RegistrationId, DbType.String);
                 parameters.Add("Name", entity.Name, DbType.String);
                 parameters.Add("DateOfBirth", entity.DateOfBirth, DbType.DateTime);
                 parameters.Add("CNIC", entity.CNIC, DbType.String);

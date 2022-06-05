@@ -40,6 +40,7 @@ namespace MSProjectBackend.Services.Classes
         public async Task<int> CreateVolunteerAsync(VolunteerModel volunteerModel)
         {
             Volunteer volunteer = ModelToEntity(volunteerModel);
+            volunteer.RegistrationId = volunteerModel.RegistrationId;
             return await _volunteerRepository.CreateAsync(volunteer);
         }
 
@@ -60,7 +61,6 @@ namespace MSProjectBackend.Services.Classes
             Volunteer volunteer = new Volunteer();
 
             volunteer.Id = volunteerModel.Id;
-            volunteer.RegistrationId = volunteerModel.RegistrationId;
             volunteer.Name = volunteerModel.Name;
             if(!string.IsNullOrEmpty(volunteerModel.DateOfBirth))
                 volunteer.DateOfBirth = Convert.ToDateTime(volunteerModel.DateOfBirth);
@@ -88,6 +88,7 @@ namespace MSProjectBackend.Services.Classes
 
             volunteerModel.Id = volunteer.Id;
             volunteerModel.Name = volunteer.Name;
+            volunteerModel.RegistrationId = volunteer.RegistrationId;
             if(volunteer.DateOfBirth != null)
                 volunteerModel.DateOfBirth = Convert.ToDateTime(volunteer.DateOfBirth).ToString("yyyy-MM-dd");
             volunteerModel.CNIC = volunteer.CNIC;
