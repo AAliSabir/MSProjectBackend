@@ -112,7 +112,7 @@ namespace MSProjectBackend.Controllers
                         if(volunteerModel != null)
                         {
                             responseObject.Status = "1";
-                            responseObject.Message = "Account Found Successfully, 1.";
+                            responseObject.Message = "Signed In Successfully, 1.";
                             responseObject.OtherInformation = volunteerModel;
                             return StatusCode(StatusCodes.Status200OK, responseObject);
                         }
@@ -123,7 +123,7 @@ namespace MSProjectBackend.Controllers
                         if (ngoModel != null)
                         {
                             responseObject.Status = "1";
-                            responseObject.Message = "Account Found Successfully, 1.";
+                            responseObject.Message = "Signed In Successfully, 2.";
                             responseObject.OtherInformation = ngoModel;
                             return StatusCode(StatusCodes.Status200OK, responseObject);
                         }
